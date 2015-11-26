@@ -80,6 +80,7 @@ public class InternalNode extends Node{
 		lastindex+=ns.lastindex;
 		this.setNext(ns.next);
 		if (this.next!=null) this.getNext().setPrev(this);
+		readopt();
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class InternalNode extends Node{
 		// ADD CODE HERE //  
 		///////////////////
 
-		Node ns = this.getNext();
+		InternalNode ns = (InternalNode) this.getNext();
 		int newLastindex = (lastindex+ns.lastindex)/2;
 		int keysShifted = Math.abs(lastindex-newLastindex);
 		
@@ -122,6 +123,9 @@ public class InternalNode extends Node{
 		
 		int toParent = ns.keys[0];
 		ns.keys[0]=0;
+		
+		this.readopt();
+		ns.readopt();
 		return toParent;
 	}
 	
@@ -144,7 +148,8 @@ public class InternalNode extends Node{
 		System.arraycopy(ptrs, i, ptrs, i+1, lastindex+1-i);
 		keys[i]=val;
 		ptrs[i]=ptr;
-		lastindex++;	
+		lastindex++;
+		readopt();
 	}
 
 	/**
@@ -231,9 +236,6 @@ public class InternalNode extends Node{
 		} else {
 			new InternalNode(degree,this,toParent,ns,null,null);
 		}
-		
-		this.readopt();
-		ns.readopt();
 	}
 
 	public void outputForGraphviz() {
@@ -273,6 +275,12 @@ public class InternalNode extends Node{
 
 			if (j == lastindex)
 				System.out.print ("]");
+		}
+	}
+	
+	protected void readopt() {
+		for (int i=0;i<=this.lastindex;i++) {
+			ptrs[i].setParent(new Reference(this,i,false));
 		}
 	}
 }

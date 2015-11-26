@@ -340,7 +340,6 @@ public abstract class Node{
 		int bringDown = parentref.getNode().keys[toRemove];
 		if (this instanceof InternalNode && bringDown != next.keys[1]) insert(bringDown, next.ptrs[0]);
 		this.combine();
-		this.readopt();
 		parentref.getNode().delete(toRemove);
 	}
 	
@@ -357,8 +356,6 @@ public abstract class Node{
 		int toParent = this.redistribute();
 		int outOfDateKeyIdx = next.parentref.getIndex();
 		parentref.getNode().keys[outOfDateKeyIdx] = toParent;
-		this.readopt();
-		next.readopt();
 	}
 	
 	
@@ -453,11 +450,5 @@ public abstract class Node{
 	 */
 	public abstract void insert (int val, Node ptr);
 
-	protected void readopt() {
-		if (this instanceof LeafNode) return;
-		for (int i=0;i<=this.lastindex;i++) {
-			ptrs[i].setParent(new Reference(this,i,false));
-		}
-	}
 }
 
