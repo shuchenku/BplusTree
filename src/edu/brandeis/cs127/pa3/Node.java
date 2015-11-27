@@ -1,7 +1,5 @@
 package edu.brandeis.cs127.pa3;
 
-import java.util.Arrays;
-
 /**
    Superclass of Leaf Nodes (LeafNode) and Internal Nodes (InternalNode)
    of B+-Trees.
@@ -315,35 +313,36 @@ public abstract class Node{
 		
 		int bye = keys[i];
 		
-		if (bye==29) {
+		if (bye==7) {
 			System.out.println(bye);
 		}	
 		deleteSimple(i);
-		if (lastindex<minkeys()) {
+		
+		if (lastindex<minkeys()) {			
 			if (siblings(next) && combinable(next)) {
-				this.combineHelper();
+				this.fancyCombine();
 			} else if (siblings(prev) && combinable(prev)){
-				prev.combineHelper();
+				prev.fancyCombine();
 			} else {
 				if (siblings(next)) {
-					this.redistributeHelper();
+					this.fancyRedistribute();
 				} else if (siblings(prev)) {
-					prev.redistributeHelper();
+					prev.fancyRedistribute();
 				}
 			}
 		}
 		updateInternal(bye);
 	}
 	
-	protected void combineHelper() {
+	protected void fancyCombine() {
 		int toRemove = next.parentref.getIndex();
 		int bringDown = parentref.getNode().keys[toRemove];
 		if (this instanceof InternalNode && bringDown != next.keys[1]) insert(bringDown, next.ptrs[0]);
 		this.combine();
-		parentref.getNode().delete(toRemove);
+		parentref.getNode().delete(toRemove);	
 	}
 	
-	protected void redistributeHelper() {
+	protected void fancyRedistribute() {
 		int toRemove = next.parentref.getIndex();
 		int bringDown = parentref.getNode().keys[toRemove];
 		if ((next.lastindex ==0 || bringDown != next.keys[1])) {
@@ -449,6 +448,17 @@ public abstract class Node{
        @param ptr the pointer to insert
 	 */
 	public abstract void insert (int val, Node ptr);
+	
+	
+	// w/o calling this the tree would still be valid
+	protected void UnnecessaryMethod() {
+		// set keys to 0 so that tests pass.
+		int i = lastindex+1;
+		while (i<degree) {
+			keys[i]=0;
+			i++;
+		}
+	}
 
 }
 

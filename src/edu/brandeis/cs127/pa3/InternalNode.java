@@ -81,6 +81,8 @@ public class InternalNode extends Node{
 		this.setNext(ns.next);
 		if (this.next!=null) this.getNext().setPrev(this);
 		readopt();
+		
+		UnnecessaryMethod();
 	}
 
 	/**
@@ -126,6 +128,9 @@ public class InternalNode extends Node{
 		
 		this.readopt();
 		ns.readopt();
+		
+		UnnecessaryMethod();
+		ns.UnnecessaryMethod();
 		return toParent;
 	}
 	
@@ -150,6 +155,7 @@ public class InternalNode extends Node{
 		ptrs[i]=ptr;
 		lastindex++;
 		readopt();
+		UnnecessaryMethod();
 	}
 
 	/**
@@ -172,6 +178,8 @@ public class InternalNode extends Node{
 		}
 		lastindex--;	
 		readopt();
+		
+		UnnecessaryMethod();
 	}
 
 
@@ -214,7 +222,6 @@ public class InternalNode extends Node{
 		// if not full then just insert the key
 		if (!full() && keys[Math.min(toIndex,lastindex)]!=val) {
 			insertSimple(val,ptr,toIndex);
-			readopt();
 			return;
 		}
 		
@@ -224,6 +231,7 @@ public class InternalNode extends Node{
 			ns = new InternalNode(degree,null,val,ptr,next,(Node) this);
 		} else {
 			ns = new InternalNode(degree, null,keys[lastindex], ptrs[lastindex], next,(Node) this);
+			
 			lastindex--;
 			insertSimple(val,ptr,toIndex);
 		}
@@ -231,7 +239,6 @@ public class InternalNode extends Node{
 		int toParent = redistribute();
 		// recursively insert into parent if exists
 		if (getParent()!=null) {
-			ns.setParent(parentref);
 			parentref.getNode().insert(toParent, ns);				
 		} else {
 			new InternalNode(degree,this,toParent,ns,null,null);

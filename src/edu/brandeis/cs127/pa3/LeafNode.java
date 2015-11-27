@@ -85,6 +85,7 @@ public class LeafNode extends Node {
 		lastindex+=ns.lastindex;
 		this.next = ns.next;
 		if (this.next!=null) this.next.prev = this;
+		UnnecessaryMethod();
 	}
 
 	/**
@@ -114,6 +115,9 @@ public class LeafNode extends Node {
 		}
 		ns.lastindex += lastindex-newLastindex;
 		lastindex = newLastindex;
+		
+		UnnecessaryMethod();
+		ns.UnnecessaryMethod();
 		return ns.keys[1];
 	}
 
@@ -133,6 +137,7 @@ public class LeafNode extends Node {
 		System.arraycopy(keys, i, keys, i+1, lastindex+1-i);
 		keys[i] = val;
 		lastindex++;
+		UnnecessaryMethod();
 	}
 
 
@@ -150,6 +155,7 @@ public class LeafNode extends Node {
 		
 		System.arraycopy(keys, i+1, keys, i, lastindex-i);
 		lastindex--;
+		UnnecessaryMethod();
 	} 
 
 	/**
@@ -188,16 +194,11 @@ public class LeafNode extends Node {
 		// ADD CODE HERE //
 		///////////////////
 				
-		if (val==145) {
-			System.out.println(145);
-		}
-		
+//		if (val==145) {
+//			System.out.println(145);
+//		}
+//		
 		int toIndex = findKeyIndex(val);
-		
-		// if value already exists, abort. Useless??????
-		if (search(val).getMatch()) {
-			return;
-		}
 		
 		// if leafnode not full then just insert the key
 		if (!full()) {
@@ -219,7 +220,6 @@ public class LeafNode extends Node {
 		
 		//insert into parent
 		if (this.parentref!=null) {
-			ns.setParent(this.parentref);
 			this.getParent().getNode().insert(toParent, ns);
 		} else {
 			new InternalNode(degree,this,toParent,ns,null,null); 
