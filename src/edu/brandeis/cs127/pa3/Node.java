@@ -200,11 +200,6 @@ public abstract class Node{
 	 */
 	public int findKeyIndex (int val){
 		int i = 1;
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-		
 		while (i<=lastindex) {
 			if (val > keys[i-1] && val<=keys[i]) break;	
 			i++;
@@ -306,16 +301,8 @@ public abstract class Node{
        @param i the index of key and pointer to delete
 	 */
 	public void delete (int i){
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
 		
 		int bye = keys[i];
-		
-		if (bye==7) {
-			System.out.println(bye);
-		}	
 		deleteSimple(i);
 		
 		if (lastindex<minkeys()) {			

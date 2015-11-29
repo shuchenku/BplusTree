@@ -1,7 +1,5 @@
 package edu.brandeis.cs127.pa3;
 
-import java.util.Arrays;
-
 /**
    LeafNodes of B+ trees
  */
@@ -41,18 +39,11 @@ public class LeafNode extends Node {
 	the minimum number of keys the leaf node should have.
 	 */
 	public int minkeys () {
-		int min = 0;
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////	
-		
 		if (parentref==null) {
-			min = 1;
+			return 1;
 		} else {
-			min = degree/2;
+			return degree/2;
 		}
-		return min;
 	}
 
 	/**
@@ -61,13 +52,7 @@ public class LeafNode extends Node {
        @return true if this node can be combined with other; otherwise false.
 	 */
 	public boolean combinable (Node other){
-		
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-		
-		if (lastindex+other.lastindex>=degree) return false;
-		return true;
+		return lastindex+other.lastindex<degree;
 	}
 
 	/**
@@ -75,11 +60,6 @@ public class LeafNode extends Node {
        into a single node
 	 */
 	public void combine (){
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-		
 		Node ns=this.next;
 		System.arraycopy(ns.keys, 1, keys, lastindex+1, ns.lastindex);
 		lastindex+=ns.lastindex;
@@ -97,11 +77,6 @@ public class LeafNode extends Node {
        into parent node.
 	 */
 	public int redistribute (){  
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-
 		Node ns = this.getNext();
 		int newLastindex = (lastindex+ns.lastindex+1)/2;
 		int keysShifted = Math.abs(lastindex-newLastindex);
@@ -129,11 +104,6 @@ public class LeafNode extends Node {
        @param i the index where this value should be
 	 */
 	public void insertSimple (int val, Node ptr, int i){
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-		
 		System.arraycopy(keys, i, keys, i+1, lastindex+1-i);
 		keys[i] = val;
 		lastindex++;
@@ -148,11 +118,6 @@ public class LeafNode extends Node {
        one position to the left.  
 	 */
 	public void deleteSimple (int i){
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////	
-		
 		System.arraycopy(keys, i+1, keys, i, lastindex-i);
 		lastindex--;
 		UnnecessaryMethod();
@@ -164,11 +129,6 @@ public class LeafNode extends Node {
        @return a Reference object referring to this node. 
 	 */
 	public Reference search (int val){
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-
 		int loc = this.findKeyIndex(val);
 		boolean foundYa = false;
 		if (loc>lastindex) {
@@ -177,8 +137,7 @@ public class LeafNode extends Node {
 		} else {
 			foundYa = val==keys[loc];
 		}
-		Reference ref = new Reference(this, loc, foundYa);
-		return ref;
+		return new Reference(this, loc, foundYa);
 	}
 
 	/**
@@ -189,15 +148,7 @@ public class LeafNode extends Node {
        @param ptr (not used now, use null when calling this method)
 	 */
 	public void insert (int val, Node ptr){
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-				
-//		if (val==145) {
-//			System.out.println(145);
-//		}
-//		
+		
 		int toIndex = findKeyIndex(val);
 		
 		// if leafnode not full then just insert the key

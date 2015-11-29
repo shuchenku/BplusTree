@@ -32,19 +32,11 @@ public class InternalNode extends Node{
        @return the minimal number of keys a leaf node should have.
 	 */
 	public int minkeys () {
-		int min = 0;
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-		
 		if (parentref==null) {
-			min = 1;
+			return 1;
 		} else {
-			min = (degree-1)/2;
+			return (degree-1)/2;
 		}
-
-		return min;
 	}
 
 	/**
@@ -52,15 +44,7 @@ public class InternalNode extends Node{
        Return TRUE if this node and other can be combined. 
 	 */
 	public boolean combinable (Node other) {
-
-		boolean combinable = true;
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-
-		if (lastindex+other.lastindex>=degree-1) combinable=false;
-		return combinable;
+		return lastindex+other.lastindex<degree-1;
 	}
 
 
@@ -69,11 +53,6 @@ public class InternalNode extends Node{
        into a single node,
 	 */
 	public void combine () {
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-		
 		Node ns=this.next;
 		System.arraycopy(ns.keys, 1, keys, lastindex+1, ns.lastindex);
 		System.arraycopy(ns.ptrs, 1, ptrs, lastindex+1, ns.lastindex);
@@ -94,11 +73,6 @@ public class InternalNode extends Node{
        @return the value to be inserted to the parent node
 	 */
 	public int redistribute () {
-		
-		///////////////////
-		// ADD CODE HERE //  
-		///////////////////
-
 		InternalNode ns = (InternalNode) this.getNext();
 		int newLastindex = (lastindex+ns.lastindex)/2;
 		int keysShifted = Math.abs(lastindex-newLastindex);
@@ -144,10 +118,6 @@ public class InternalNode extends Node{
        @param i the position to insert the value and pointer
 	 */
 	public void insertSimple (int val, Node ptr, int i) {
-
-		////////////////////
-		// ADD CODE HERE  //
-		////////////////////
 		
 		System.arraycopy(keys, i, keys, i+1, lastindex+1-i);
 		System.arraycopy(ptrs, i, ptrs, i+1, lastindex+1-i);
@@ -167,10 +137,6 @@ public class InternalNode extends Node{
        @param i the index of the key to delete
 	 */
 	public void deleteSimple (int i) {
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
 		
 		if (i < lastindex) {
 			System.arraycopy(keys, i+1, keys, i, lastindex-i);
@@ -189,16 +155,8 @@ public class InternalNode extends Node{
        @return the reference pointing to a leaf node.
 	 */
 	public Reference search (int val) {
-		Reference ref = null;
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-		
-		int loc = this.findPtrIndex(val);
-		Node nextPtr = ptrs[loc];
-		ref = nextPtr.search(val);
-		return ref;
+		Node nextPtr = ptrs[this.findPtrIndex(val)];
+		return nextPtr.search(val);
 	}
 
 	/**
@@ -209,16 +167,8 @@ public class InternalNode extends Node{
 	 */
 	public void insert (int val, Node ptr) {
 
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////		
-		
-//		if (val==146) {
-//			System.out.println(146);
-//		}
-//		
 		int toIndex = findKeyIndex(val);
-		
+
 		// if not full then just insert the key
 		if (!full() && keys[Math.min(toIndex,lastindex)]!=val) {
 			insertSimple(val,ptr,toIndex);
