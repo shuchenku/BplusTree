@@ -171,8 +171,6 @@ public class InternalNode extends Node{
 			insertSimple(val,ptr,toIndex);
 			return;
 		}
-		
-		System.out.println("================INSERT");
 		// otherwise make a new right sibling for the current node, redistribute.
 		Node ns = null;
 		if (toIndex>lastindex) {
