@@ -57,7 +57,6 @@ public class InternalNode extends Node{
 		this.setNext(ns.next);
 		if (this.next!=null) this.getNext().setPrev(this);
 		readopt();
-		
 		UnnecessaryMethod();
 	}
 
@@ -140,8 +139,7 @@ public class InternalNode extends Node{
 			System.arraycopy(ptrs, i+1, ptrs, i, lastindex-i);	
 		}
 		lastindex--;	
-		readopt();
-		
+		readopt();	
 		UnnecessaryMethod();
 	}
 

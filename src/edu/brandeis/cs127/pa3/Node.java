@@ -297,8 +297,7 @@ public abstract class Node{
 	 */
 	public void delete (int i){		
 		int bye = keys[i];	
-		deleteSimple(i);
-		
+		deleteSimple(i);	
 		if (lastindex<minkeys()) {			
 			if (siblings(next) && combinable(next)) this.fancyCombine();
 			else if (siblings(prev) && combinable(prev)) prev.fancyCombine();
@@ -322,7 +321,7 @@ public abstract class Node{
 	protected void fancyRedistribute() {
 		int toRemove = next.parentref.getIndex();
 		int bringDown = parentref.getNode().keys[toRemove];
-		if ((next.lastindex ==0 || bringDown != next.keys[1])) {
+		if (this instanceof InternalNode) {
 			if (next.full()) insert(bringDown, next.ptrs[0]);
 			else next.insert(bringDown, next.ptrs[0]);
 		}
@@ -331,11 +330,9 @@ public abstract class Node{
 		parentref.getNode().keys[outOfDateKeyIdx] = toParent;
 	}
 	
-	
 	protected void updateInternal(int val) {
 		int outOfDateIndex = this.findKeyIndex(val);
 		if (outOfDateIndex>lastindex) outOfDateIndex--;
-		
 		if (val==keys[outOfDateIndex] && this instanceof InternalNode) {
 			keys[outOfDateIndex] = ptrs[outOfDateIndex].getMinRST();
 			return;

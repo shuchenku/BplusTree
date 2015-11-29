@@ -153,7 +153,6 @@ public class LeafNode extends Node {
 			insertSimple(val,null,toIndex);
 			return;
 		}
-		
 		// otherwise make a new right sibling for the current node, redistribute.
 		Node ns = null;
 		if (toIndex>lastindex) {
@@ -164,8 +163,7 @@ public class LeafNode extends Node {
 			insertSimple(val,null,toIndex);
 		}
 	
-		int toParent = redistribute();
-		
+		int toParent = redistribute();	
 		//insert into parent
 		if (this.parentref!=null) this.getParent().getNode().insert(toParent, ns);
 		else new InternalNode(degree,this,toParent,ns,null,null); 
