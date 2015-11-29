@@ -39,11 +39,8 @@ public class LeafNode extends Node {
 	the minimum number of keys the leaf node should have.
 	 */
 	public int minkeys () {
-		if (parentref==null) {
-			return 1;
-		} else {
-			return degree/2;
-		}
+		if (parentref==null) return 1;
+		else return degree/2;
 	}
 
 	/**
@@ -170,11 +167,8 @@ public class LeafNode extends Node {
 		int toParent = redistribute();
 		
 		//insert into parent
-		if (this.parentref!=null) {
-			this.getParent().getNode().insert(toParent, ns);
-		} else {
-			new InternalNode(degree,this,toParent,ns,null,null); 
-		}
+		if (this.parentref!=null) this.getParent().getNode().insert(toParent, ns);
+		else new InternalNode(degree,this,toParent,ns,null,null); 
 	}
 
 

@@ -220,11 +220,6 @@ public abstract class Node{
 	 */
 	public int findPtrIndex (int val){
 		int i = 0;
-
-		///////////////////
-		// ADD CODE HERE //
-		///////////////////
-		
 		
 		do {
 			if (val>=keys[i] && (i==lastindex || val<keys[i+1])) break;
@@ -300,23 +295,15 @@ public abstract class Node{
        redistribute nodes if necessary to preserve order of node.
        @param i the index of key and pointer to delete
 	 */
-	public void delete (int i){
-		
-		int bye = keys[i];
+	public void delete (int i){		
+		int bye = keys[i];	
 		deleteSimple(i);
 		
 		if (lastindex<minkeys()) {			
-			if (siblings(next) && combinable(next)) {
-				this.fancyCombine();
-			} else if (siblings(prev) && combinable(prev)){
-				prev.fancyCombine();
-			} else {
-				if (siblings(next)) {
-					this.fancyRedistribute();
-				} else if (siblings(prev)) {
-					prev.fancyRedistribute();
-				}
-			}
+			if (siblings(next) && combinable(next)) this.fancyCombine();
+			else if (siblings(prev) && combinable(prev)) prev.fancyCombine();
+			else if (siblings(next)) this.fancyRedistribute();
+			else if (siblings(prev)) prev.fancyRedistribute();
 		}
 		updateInternal(bye);
 	}
@@ -324,7 +311,10 @@ public abstract class Node{
 	protected void fancyCombine() {
 		int toRemove = next.parentref.getIndex();
 		int bringDown = parentref.getNode().keys[toRemove];
-		if (this instanceof InternalNode && bringDown != next.keys[1]) insert(bringDown, next.ptrs[0]);
+		if (this instanceof InternalNode) {
+			if (next.full()) insert(bringDown, next.ptrs[0]);
+			else next.insert(bringDown, next.ptrs[0]);
+		}
 		this.combine();
 		parentref.getNode().delete(toRemove);	
 	}
@@ -333,11 +323,8 @@ public abstract class Node{
 		int toRemove = next.parentref.getIndex();
 		int bringDown = parentref.getNode().keys[toRemove];
 		if ((next.lastindex ==0 || bringDown != next.keys[1])) {
-			if (next.full()) {
-				insert(bringDown, next.ptrs[0]);
-			} else {
-				next.insert(bringDown, next.ptrs[0]);
-			}
+			if (next.full()) insert(bringDown, next.ptrs[0]);
+			else next.insert(bringDown, next.ptrs[0]);
 		}
 		int toParent = this.redistribute();
 		int outOfDateKeyIdx = next.parentref.getIndex();
@@ -357,11 +344,8 @@ public abstract class Node{
 	}
 	
 	public int getMinRST() {
-		if (this instanceof LeafNode) {
-			return keys[1];
-		} else {
-			return this.ptrs[0].getMinRST();
-		}
+		if (this instanceof LeafNode) return keys[1];
+		else return this.ptrs[0].getMinRST();
 	}
 
 	/**

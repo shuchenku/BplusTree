@@ -32,11 +32,8 @@ public class InternalNode extends Node{
        @return the minimal number of keys a leaf node should have.
 	 */
 	public int minkeys () {
-		if (parentref==null) {
-			return 1;
-		} else {
-			return (degree-1)/2;
-		}
+		if (parentref==null) return 1;
+		else return (degree-1)/2;
 	}
 
 	/**
@@ -175,24 +172,21 @@ public class InternalNode extends Node{
 			return;
 		}
 		
+		System.out.println("================INSERT");
 		// otherwise make a new right sibling for the current node, redistribute.
 		Node ns = null;
 		if (toIndex>lastindex) {
 			ns = new InternalNode(degree,null,val,ptr,next,(Node) this);
 		} else {
-			ns = new InternalNode(degree, null,keys[lastindex], ptrs[lastindex], next,(Node) this);
-			
+			ns = new InternalNode(degree, null,keys[lastindex], ptrs[lastindex], next,(Node) this);	
 			lastindex--;
 			insertSimple(val,ptr,toIndex);
 		}
 		
 		int toParent = redistribute();
 		// recursively insert into parent if exists
-		if (getParent()!=null) {
-			parentref.getNode().insert(toParent, ns);				
-		} else {
-			new InternalNode(degree,this,toParent,ns,null,null);
-		}
+		if (getParent()!=null) parentref.getNode().insert(toParent, ns);				
+		else new InternalNode(degree,this,toParent,ns,null,null);
 	}
 
 	public void outputForGraphviz() {
