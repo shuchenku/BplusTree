@@ -204,8 +204,7 @@ public class InternalNode extends Node{
 		else next.insert(bringDown, next.ptrs[0]);
 		
 		int toParent = this.redistribute();
-		int outOfDateKeyIdx = next.parentref.getIndex();
-		parentref.getNode().keys[outOfDateKeyIdx] = toParent;
+		parentref.getNode().keys[toRemove] = toParent;
 	}
 	
 	protected void updateInternal(int val) {
