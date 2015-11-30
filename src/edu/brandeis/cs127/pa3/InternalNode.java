@@ -184,6 +184,44 @@ public class InternalNode extends Node{
 		if (getParent()!=null) parentref.getNode().insert(toParent, ns);				
 		else new InternalNode(degree,this,toParent,ns,null,null);
 	}
+	
+	protected void fancyCombine() {
+		int toRemove = next.parentref.getIndex();
+		int bringDown = parentref.getNode().keys[toRemove];
+		
+		if (next.full()) insert(bringDown, next.ptrs[0]);
+		else next.insert(bringDown, next.ptrs[0]);
+		
+		this.combine();
+		parentref.getNode().delete(toRemove);	
+	}
+	
+	protected void fancyRedistribute() {
+		int toRemove = next.parentref.getIndex();
+		int bringDown = parentref.getNode().keys[toRemove];
+		
+		if (next.full()) insert(bringDown, next.ptrs[0]);
+		else next.insert(bringDown, next.ptrs[0]);
+		
+		int toParent = this.redistribute();
+		int outOfDateKeyIdx = next.parentref.getIndex();
+		parentref.getNode().keys[outOfDateKeyIdx] = toParent;
+	}
+	
+	protected void updateInternal(int val) {
+		int outOfDateIndex = this.findKeyIndex(val);
+		if (outOfDateIndex>lastindex) outOfDateIndex--;
+		if (val==keys[outOfDateIndex]) {
+			keys[outOfDateIndex] = ptrs[outOfDateIndex].getMinRST();
+			return;
+		}
+		if (parentref!=null) parentref.getNode().updateInternal(val);
+	}
+	
+	public int getMinRST() {
+		return this.ptrs[0].getMinRST();
+	}
+
 
 	public void outputForGraphviz() {
 
@@ -214,7 +252,6 @@ public class InternalNode extends Node{
 		int j;
 		System.out.print("[");
 		for (j = 0; j <= lastindex; j++) {
-
 			if (j == 0)
 				System.out.print (" * ");
 			else

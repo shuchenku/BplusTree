@@ -307,44 +307,14 @@ public abstract class Node{
 		updateInternal(bye);
 	}
 	
-	protected void fancyCombine() {
-		int toRemove = next.parentref.getIndex();
-		int bringDown = parentref.getNode().keys[toRemove];
-		if (this instanceof InternalNode) {
-			if (next.full()) insert(bringDown, next.ptrs[0]);
-			else next.insert(bringDown, next.ptrs[0]);
-		}
-		this.combine();
-		parentref.getNode().delete(toRemove);	
-	}
+	abstract protected void fancyRedistribute();
 	
-	protected void fancyRedistribute() {
-		int toRemove = next.parentref.getIndex();
-		int bringDown = parentref.getNode().keys[toRemove];
-		if (this instanceof InternalNode) {
-			if (next.full()) insert(bringDown, next.ptrs[0]);
-			else next.insert(bringDown, next.ptrs[0]);
-		}
-		int toParent = this.redistribute();
-		int outOfDateKeyIdx = next.parentref.getIndex();
-		parentref.getNode().keys[outOfDateKeyIdx] = toParent;
-	}
+	abstract protected void fancyCombine();
 	
-	protected void updateInternal(int val) {
-		int outOfDateIndex = this.findKeyIndex(val);
-		if (outOfDateIndex>lastindex) outOfDateIndex--;
-		if (val==keys[outOfDateIndex] && this instanceof InternalNode) {
-			keys[outOfDateIndex] = ptrs[outOfDateIndex].getMinRST();
-			return;
-		}
-		if (parentref!=null) parentref.getNode().updateInternal(val);
-	}
+	abstract protected void updateInternal(int val);
 	
-	public int getMinRST() {
-		if (this instanceof LeafNode) return keys[1];
-		else return this.ptrs[0].getMinRST();
-	}
-
+	abstract protected int getMinRST();
+	
 	/**
        The minimum number of keys this node should have, which differs from {@link LeafNode} and 
        {@link InternalNode}.

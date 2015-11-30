@@ -168,7 +168,28 @@ public class LeafNode extends Node {
 		if (this.parentref!=null) this.getParent().getNode().insert(toParent, ns);
 		else new InternalNode(degree,this,toParent,ns,null,null); 
 	}
+	
+	protected void fancyCombine() {
+		int toRemove = next.parentref.getIndex();
+		this.combine();
+		parentref.getNode().delete(toRemove);	
+	}
 
+	protected void fancyRedistribute() {
+		int toParent = this.redistribute();
+		int outOfDateKeyIdx = next.parentref.getIndex();
+		parentref.getNode().keys[outOfDateKeyIdx] = toParent;
+	}
+	
+	protected void updateInternal(int val) {
+		int outOfDateIndex = this.findKeyIndex(val);
+		if (outOfDateIndex>lastindex) outOfDateIndex--;
+		if (parentref!=null) parentref.getNode().updateInternal(val);
+	}
+	
+	protected int getMinRST() {
+		return keys[1];
+	}
 
 	/**
        Print to stdout the content of this node
