@@ -76,8 +76,6 @@ public class BTree{
 
 		System.out.println("\n");
 
-		System.out.println("SEARCH: ");
-
 		if (root == null) 
 			System.out.println(val + " not found in empty tree.");
 		else {
@@ -103,7 +101,6 @@ public class BTree{
 	public void insert (int val) {
 
 		System.out.println("\n");
-		System.out.print("INSERT: ");
 		if (root == null) {
 
 			// This is the first insert in the tree - time to create a node
@@ -148,7 +145,6 @@ public class BTree{
 	public void delete (int val) {
 
 		System.out.println("\n");
-		System.out.println("DELETE: "+val);
 		
 		if (val==257) {
 			System.out.println(val);

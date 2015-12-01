@@ -393,6 +393,7 @@ public abstract class Node{
 		// set keys to 0 so that tests pass.
 		int i = lastindex+1;
 		while (i<degree) {
+			ptrs[i]=null;
 			keys[i]=0;
 			i++;
 		}
