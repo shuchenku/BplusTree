@@ -85,6 +85,7 @@ public class LeafNode extends Node {
 			System.arraycopy(ns.keys, 1, keys, lastindex+1, keysShifted);
 			System.arraycopy(ns.keys, 1+keysShifted, ns.keys, 1, ns.lastindex-keysShifted);
 		}
+		
 		ns.lastindex += lastindex-newLastindex;
 		lastindex = newLastindex;
 		
@@ -170,20 +171,28 @@ public class LeafNode extends Node {
 	}
 	
 	protected void fancyCombine() {
+		// the index to be removed in parent
 		int toRemove = next.parentref.getIndex();
+		// combine
 		this.combine();
+		// remove from parent right siblings pointer and key
 		parentref.getNode().delete(toRemove);	
 	}
 
 	protected void fancyRedistribute() {
+		// redistribute
 		int toParent = this.redistribute();
+		// the index to be replaced in parent
 		int outOfDateKeyIdx = next.parentref.getIndex();
+		//replace key in parent
 		parentref.getNode().keys[outOfDateKeyIdx] = toParent;
 	}
 	
 	protected void updateInternal(int val) {
+		// index the value deleted
 		int outOfDateIndex = this.findKeyIndex(val);
 		if (outOfDateIndex>lastindex) outOfDateIndex--;
+		// recursively look for the key's occurrence in ancestors 
 		if (parentref!=null) parentref.getNode().updateInternal(val);
 	}
 	

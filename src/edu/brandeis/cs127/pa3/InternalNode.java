@@ -90,13 +90,12 @@ public class InternalNode extends Node{
 		}
 		
 		ns.lastindex += lastindex-newLastindex-1;
-		if (ns.lastindex == 0) ns.lastindex++;
 		this.lastindex = newLastindex;		
 		
 		int toParent = ns.keys[0];
 		ns.keys[0]=0;
 		
-		this.readopt();
+		readopt();
 		ns.readopt();
 		
 		UnnecessaryMethod();
@@ -165,7 +164,7 @@ public class InternalNode extends Node{
 		int toIndex = findKeyIndex(val);
 
 		// if not full then just insert the key
-		if (!full() && keys[Math.min(toIndex,lastindex)]!=val) {
+		if (!full()) {
 			insertSimple(val,ptr,toIndex);
 			return;
 		}
@@ -186,31 +185,43 @@ public class InternalNode extends Node{
 	}
 	
 	protected void fancyCombine() {
+		// the index to be removed in parent
 		int toRemove = next.parentref.getIndex();
+		// value in that key
 		int bringDown = parentref.getNode().keys[toRemove];
-		
+		// insert in any of these two nodes that is not full
 		if (next.full()) insert(bringDown, next.ptrs[0]);
 		else next.insert(bringDown, next.ptrs[0]);
-		
+		// combine
 		this.combine();
+		// remove from parent right siblings pointer and key
 		parentref.getNode().delete(toRemove);	
 	}
 	
 	protected void fancyRedistribute() {
+		// the index to be replaced in parent
 		int toRemove = next.parentref.getIndex();
+		// value in that key
 		int bringDown = parentref.getNode().keys[toRemove];
 		
+		// insert in any of these two nodes that is not full
 		if (next.full()) insert(bringDown, next.ptrs[0]);
 		else next.insert(bringDown, next.ptrs[0]);
 		
+		// redistribute
 		int toParent = this.redistribute();
+		//replace key in parent
 		parentref.getNode().keys[toRemove] = toParent;
 	}
 	
 	protected void updateInternal(int val) {
+		// index the value deleted
 		int outOfDateIndex = this.findKeyIndex(val);
+		
 		if (outOfDateIndex>lastindex) outOfDateIndex--;
+		// recursively look for the key's occurrence in ancestors 
 		if (val==keys[outOfDateIndex]) {
+			// if found, recursively look for minimum in the current node's right subtree
 			keys[outOfDateIndex] = ptrs[outOfDateIndex].getMinRST();
 			return;
 		}
