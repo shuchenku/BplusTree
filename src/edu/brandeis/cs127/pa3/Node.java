@@ -296,7 +296,6 @@ public abstract class Node{
        @param i the index of key and pointer to delete
 	 */
 	public void delete (int i){		
-		int bye = keys[i];	
 		deleteSimple(i);	
 		if (lastindex<minkeys()) {			
 			if (siblings(next) && combinable(next)) this.fancyCombine();
@@ -304,7 +303,6 @@ public abstract class Node{
 			else if (siblings(next)) this.fancyRedistribute();
 			else if (siblings(prev)) prev.fancyRedistribute();
 		}
-		if (this instanceof LeafNode) updateInternal(bye);
 	}
 	
 	abstract protected void fancyRedistribute();

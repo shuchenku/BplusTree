@@ -170,6 +170,13 @@ public class LeafNode extends Node {
 		else new InternalNode(degree,this,toParent,ns,null,null); 
 	}
 	
+	@Override
+	public void delete (int i){	
+		int bye = keys[i];	
+		super.delete(i);
+		updateInternal(bye);	
+	}
+	
 	protected void fancyCombine() {
 		// the index to be removed in parent
 		int toRemove = next.parentref.getIndex();
