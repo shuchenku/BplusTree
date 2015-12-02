@@ -304,7 +304,7 @@ public abstract class Node{
 			else if (siblings(next)) this.fancyRedistribute();
 			else if (siblings(prev)) prev.fancyRedistribute();
 		}
-		updateInternal(bye);
+		if (this instanceof LeafNode) updateInternal(bye);
 	}
 	
 	abstract protected void fancyRedistribute();

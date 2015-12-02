@@ -215,7 +215,7 @@ public class InternalNode extends Node{
 	}
 	
 	protected void updateInternal(int val) {
-		// index the value deleted
+		// index of the value deleted
 		int outOfDateIndex = this.findKeyIndex(val);
 		
 		if (outOfDateIndex>lastindex) outOfDateIndex--;
